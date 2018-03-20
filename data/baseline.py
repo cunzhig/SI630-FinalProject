@@ -14,13 +14,6 @@ import matplotlib.pyplot as plt
 def load_data(filename):
     pass
 
-def tokenize(word):
-    tokens=word.split(" ")
-    for token in tokens:
-        token=re.sub(r'\[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g','',token)
-        token=token.lower()
-    return tokens
-
 def train_data():
     pass
 
