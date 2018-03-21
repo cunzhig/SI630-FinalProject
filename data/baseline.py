@@ -1,21 +1,21 @@
 import os,sys,re,csv
-import pickle
-from collections import Counter, defaultdict
 import numpy as np
 import scipy
 import math
 import random
 import nltk
-from scipy.spatial.distance import cosine
-from nltk.corpus import stopwords
-from numba import jit
-import matplotlib.pyplot as plt
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
 
 tweets=[]
 emojis=[]
+tweets_dict={}
+predictions=[]
 
 def load_data(filename):
     #load date into two list, tweets and emojis
+    global tweets_dict
     global tweets
     global emojis
     f = open(filename, "r", encoding="utf8")
@@ -27,25 +27,37 @@ def load_data(filename):
             tweets.append(tweet)
             emoji=row[1]
             emojis.append(emoji)
+            tweets_dict[tweet]=emoji
 
 def calculate_most_frequent_emoji(emojis):
-    print(emojis)
     emoji_dict={}
     for emoji in emojis:
         if emoji not in emoji_dict:
             emoji_dict[emoji]=1
         else:
             emoji_dict[emoji]+=1
-    #print（sorted(emoji_dict(), key=lambda d: d[1])）
-    #print(emoji_dict)
+    emoji_list=sorted(emoji_dict.items(), key=lambda d: d[1],reverse=True)
+    #print(emoji_list)
+    return emoji_list[0][0]
 
-
-
-def train_data():
-    pass
-
-def predict():
-    pass
+def predict(filename,emoji):
+    #print(emoji)
+    global predictions
+    origins=[]
+    f = open(filename, "r", encoding="utf8")
+    rows =f.read().split("\n")
+    #print(len(rows))
+    for each in rows:
+        row=each.split("\t")
+        if len(row)==2:
+            origins.append(row[1])
+            predictions.append(emoji)
+    print("f1_score:",f1_score(origins, predictions,average='micro'))
+    print("precision:",precision_score(origins, predictions,average='micro'))
+    print("recall:",recall_score(origins, predictions,average='micro'))
 
 load_data("20_train")
-calculate_most_frequent_emoji(emojis)
+most_frequent_emoji=calculate_most_frequent_emoji(emojis)
+load_data("20_validation")
+most_frequent_emoji=calculate_most_frequent_emoji(emojis)
+predict("20_test",most_frequent_emoji)
