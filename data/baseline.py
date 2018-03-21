@@ -37,7 +37,9 @@ def calculate_most_frequent_emoji(emojis):
         else:
             emoji_dict[emoji]+=1
     emoji_list=sorted(emoji_dict.items(), key=lambda d: d[1],reverse=True)
-    #print(emoji_list)
+    print(emoji_list)
+    for each in emoji_list:
+        print(each)
     return emoji_list[0][0]
 
 def predict(filename,emoji):
@@ -58,6 +60,6 @@ def predict(filename,emoji):
 
 load_data("20_train")
 most_frequent_emoji=calculate_most_frequent_emoji(emojis)
-load_data("20_validation")
-most_frequent_emoji=calculate_most_frequent_emoji(emojis)
+#load_data("20_validation")
+#most_frequent_emoji=calculate_most_frequent_emoji(emojis)
 predict("20_test",most_frequent_emoji)
